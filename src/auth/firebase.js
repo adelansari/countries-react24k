@@ -20,13 +20,10 @@ const db = getFirestore(app);
 
 const loginWithEmailAndPassword = async (email, password) => {
   try {
-    const res = await signInWithEmailAndPassword(auth, email, password);
-    const user = res.user;
-    return user;
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.log(error);
     alert(error.message);
-    return error;
   }
 };
 
@@ -34,17 +31,15 @@ const registerWithEmailAndPassword = async (name, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, 'users', { uid: user.uid, name: name, authProvider: 'local', email: email }));
-    return user;
+    await addDoc(collection(db, 'user'), { uid: user.uid, name, authProvider: 'local', email });
   } catch (error) {
     console.log(error);
     alert(error.message);
-    return error;
   }
 };
 
-const signOut = () => {
+const logout = () => {
   signOut(auth);
 };
 
-export { auth, db, loginWithEmailAndPassword, registerWithEmailAndPassword, signOut };
+export { auth, db, loginWithEmailAndPassword, registerWithEmailAndPassword, logout };

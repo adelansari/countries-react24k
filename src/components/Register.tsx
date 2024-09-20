@@ -19,13 +19,13 @@ const Register = () => {
       alert('Name is required');
       return;
     }
-    registerWithEmailAndPassword(email, password);
+    registerWithEmailAndPassword(name, email, password);
   };
 
   return (
     <div>
       <h1>Register</h1>
-      <input type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+      <input type='text' placeholder='Full Name' value={name} onChange={(e) => setName(e.target.value)} />
       <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
       <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
       <Button onClick={handleRegister}>Register</Button>
