@@ -1,4 +1,6 @@
 import { initializeApp } from 'firebase/app';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,3 +14,37 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const loginWithEmailAndPassword = async (email, password) => {
+  try {
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    return user;
+  } catch (error) {
+    console.log(error);
+    alert(error.message);
+    return error;
+  }
+};
+
+const registerWithEmailAndPassword = async (name, email, password) => {
+  try {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    await addDoc(collection(db, 'users', { uid: user.uid, name: name, authProvider: 'local', email: email }));
+    return user;
+  } catch (error) {
+    console.log(error);
+    alert(error.message);
+    return error;
+  }
+};
+
+const signOut = () => {
+  signOut(auth);
+};
+
+export { auth, db, loginWithEmailAndPassword };
